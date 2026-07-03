@@ -32,7 +32,7 @@ LOGIN_URL = "https://dash.aclclouds.com/auth/login"
 PROJECT_URL = "https://dash.aclclouds.com/projects"
 # ===========================================
 
-class SkyCastleRenewal:
+class AclcloudsRenewal:
     def __init__(self):
         self.BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.screenshot_dir = os.path.join(self.BASE_DIR, "artifacts")
@@ -145,4 +145,4 @@ class SkyCastleRenewal:
 
 
 if __name__ == "__main__":
-    SkyCastleRenewal().run()
+    AclcloudsRenewal().run()

@@ -150,7 +150,7 @@ class AclcloudsRenewal:
                 if not sb.is_element_visible(selector):
                     renew_screenshot = f"{self.screenshot_dir}/renew.png"
                     sb.save_screenshot(renew_screenshot)
-                    self.send_telegram_notify("未找到Renew按钮,无需续期", renew_screenshot)
+                    self.send_telegram_notify(f"🎉Aclclouds 自动续期\n🕒当前无需续期\n🚀剩余使用时间：{time_before}", renew_screenshot)
                     return
                 # 点击Renew按钮
                 self.log("✅ 找到Renew按钮")
@@ -173,7 +173,7 @@ class AclcloudsRenewal:
                 time_after = self.get_expiry_time(sb)
                 verify_screenshot = f"{self.screenshot_dir}/verify.png"
                 sb.save_screenshot(verify_screenshot)
-                self.send_telegram_notify("已点击Verify按钮", verify_screenshot)
+                self.send_telegram_notify(f"🎉Aclclouds 自动续期\n🕒续期前剩余使用时间：{time_before}\n🚀续期后剩余使用时间：{time_after}", verify_screenshot)
                 self.log("✅ 流程完毕")
 
             

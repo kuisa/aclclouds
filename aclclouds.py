@@ -141,7 +141,7 @@ class AclcloudsRenewal:
             self.log("📂 进入续期面板")
             page.goto(PROJECT_URL, wait_until="domcontentloaded")
             self.human_wait()
-            #self.dump_debug(page, "project", "project loaded")
+            self.dump_debug(page, "project", "project loaded")
 
             if self.is_blocked(page):
                 self.dump_debug(page, "project", "BLOCKED")
@@ -177,13 +177,13 @@ class AclcloudsRenewal:
             self.log("🖱️ 点击验证按钮")
             page.click(".auth-captcha-checkbox")
             self.human_wait()
-            #self.dump_debug(page, "Verify", "Verify Clicked")
+            self.dump_debug(page, "Verify", "Verify Clicked")
 
             if self.is_blocked(page):
                 self.dump_debug(page, "Verify", "BLOCKED")
                 return
 
-            time_text = self.get_expiry_time(self, page)
+            time_text = self.get_expiry_time(page)
             self.dump_debug(page, "🎉Aclclouds-自动续期", f"🕒续期完毕\n🚀剩余使用时间：{time_text}")
             self.log("✅ 流程完毕")
 

@@ -211,7 +211,7 @@ class AclcloudsRenewal:
                 # 2. 访问登录首页
                 self.log("🔗 访问登录首页...")
                 sb.uc_open_with_reconnect(LOGIN_URL, reconnect_time=25)
-                time.sleep(5)
+                time.sleep(10)
                 self.discord_login(sb, EMAIL, PASSWORD)
                 login_screenshot = f"{self.screenshot_dir}/login.png"
                 sb.save_screenshot(login_screenshot)

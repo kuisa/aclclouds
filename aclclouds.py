@@ -19,6 +19,10 @@ print(f"[DEBUG] Env DISPLAY: {os.environ.get('DISPLAY')}")
 print(f"[DEBUG] Env XAUTHORITY: {os.environ.get('XAUTHORITY')}")
 
 from seleniumbase import SB
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 # ================= 配置区域 =================
 PROXY_URL = os.getenv("PROXY", "")  # 代理
@@ -217,7 +221,23 @@ class AclcloudsRenewal:
                 sb.save_screenshot(login_screenshot)
                 self.send_telegram_notify("discord", login_screenshot)
                 time.sleep(5)
-                self.oauth_debug(sb)
+                #self.oauth_debug(sb)
+                wait = WebDriverWait(sb.driver, 20)
+                btn = wait.until(
+                    EC.presence_of_element_located(
+                        (By.XPATH, "//button[contains(., 'Authorize')]")
+                    )
+                )
+                sb.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
+                time.sleep(1)
+                try:
+                    wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Authorize')]")))
+                    btn.click()
+                except:
+                    try:
+                        ActionChains(sb.driver).move_to_element(btn).click().perform()
+                    except:
+                        sb.driver.execute_script("arguments[0].click();", btn)
                 self.log("✅ Discord登录成功")
                 time.sleep(5)
                 login_screenshot = f"{self.screenshot_dir}/login.png"

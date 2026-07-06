@@ -141,12 +141,17 @@ class AclcloudsRenewal:
 
                 # 4. 检查剩余时间
                 self.log("📂 进入Client页面")
-                datas = sb.uc_open_with_reconnect(CHECK_URL, reconnect_time=25)
+                cookies = sb.get_cookies()
+                session = requests.Session()
+                for c in cookies:
+                    session.cookies.set(c['name'], c['value'])
+                r = session.get(CHECK_URL)
+                time.sleep(2)
+                #datas = sb.uc_open_with_reconnect(CHECK_URL, reconnect_time=25)
                 check_screenshot = f"{self.screenshot_dir}/check.png"
                 sb.save_screenshot(check_screenshot)
                 self.send_telegram_notify("Check", check_screenshot)
-                return
-                data = json.loads(datas)
+                data = r.json()
                 expires_at_str = data["data"][0]["attributes"]["expires_at"]
                 expires_at = datetime.fromisoformat(expires_at_str)
                 now = datetime.now(timezone.utc)

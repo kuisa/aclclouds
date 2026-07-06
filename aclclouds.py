@@ -28,7 +28,8 @@ TG_CHAT_ID = os.getenv("TG_CHAT_ID")  # tg通知chat_id
 
 # 目标 URL
 LOGIN_URL = "https://dash.aclclouds.com/auth/login"
-PROJECT_URL = "https://dash.aclclouds.com/projects"
+CHECK_URL = "https://dash.aclclouds.com/api/client"
+HOME_URL = "https://dash.aclclouds.com/"
 # ===========================================
 
 class AclcloudsRenewal:
@@ -122,11 +123,7 @@ class AclcloudsRenewal:
                     "name": "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d",
                     "value": COOKIE,
                     "domain": "dash.aclclouds.com",
-                    "path": "/",
-                    "httpOnly": True,
-                    "secure": True,
-                    "sameSite": "Lax",
-                    "expires": int(time.time()) + 3600 * 24 * 365
+                    "path": "/"
                 })
                 self.log("✅ 注入Cookie成功")
                 login_screenshot = f"{self.screenshot_dir}/login.png"
@@ -134,14 +131,31 @@ class AclcloudsRenewal:
                 time.sleep(5)
                 self.send_telegram_notify("访问登录页面", login_screenshot)
 
-                # 3. 进入Project页面
-                self.log("📂 进入Project页面")
-                sb.uc_open_with_reconnect(PROJECT_URL, reconnect_time=25)
+                # 3. 检查剩余时间
+                self.log("📂 进入Client页面")
+                data = sb.uc_open_with_reconnect(CHECK_URL, reconnect_time=25)
+                expires_at_str = data["data"][0]["attributes"]["expires_at"]
+                expires_at = datetime.fromisoformat(expires_at_str)
+                now = datetime.now(timezone.utc)
+                expires_at_utc = expires_at.astimezone(timezone.utc)
+                if (expires_at_utc - now).total_seconds() > 7200 :
+                    self.log("⏰未到续期时间,流程结束.")
+                    self.send_telegram_notify("🎉Aclclouds 自动续期\n⏰未到续期时间,流程结束", "")
+                    return
+                else:
+         
+                # 1. 进入Home页面
+                self.log("📂 进入Home页面并点击My services")
+                sb.uc_open_with_reconnect(HOME_URL, reconnect_time=25)
+                time.sleep(5)
+                sb.wait_for_element_visible('a[aria-label="My services"]', timeout=10)
+                sb.click('a[aria-label="My services"]')
                 time.sleep(5)
                 sb.scroll_to_bottom() # 滑动到底部
                 poject_screenshot = f"{self.screenshot_dir}/poject.png"
                 sb.save_screenshot(poject_screenshot)
                 self.send_telegram_notify("访问项目页面", poject_screenshot)
+                return
 
                 # 4. 判断是否有Renew按钮
                 selector = "button:contains('Renew')"

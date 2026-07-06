@@ -86,7 +86,7 @@ class AclcloudsRenewal:
         # 获取文本
         return sb.get_text(selector).strip()
 
-    def run_crack(sb, i):
+    def run_crack(self, sb, i):
         # 等待验证码出现
         if not sb.is_element_visible("text=Anti-bot confirmation"):
             result = True
@@ -191,7 +191,7 @@ class AclcloudsRenewal:
                 self.send_telegram_notify("已点击验证按钮", clickverify_screenshot)
                 self.log("🔥 开始执行验证码破解")
                 for i in range(20):
-                    run_crack(sb, i)
+                    self.run_crack(sb, i)
                     time.sleep(2)
                 if not sb.is_element_visible("text=Anti-bot confirmation"):
                     time.sleep(90)

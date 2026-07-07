@@ -196,18 +196,16 @@ class AclcloudsRenewal:
                     "//*[contains(text(),'I am not a robot')]"
                 )
                 rect = el.rect
-                x = rect["x"] + rect["width"] / 2
-                y = rect["y"] + rect["height"] / 2
-                print("验证码坐标:", x, y)
-                print(sb.get_window_size())
-                print(el.rect)
+                print("验证码中心:",
+                      rect["width"]/2,
+                      rect["height"]/2)
                 actions = ActionChains(sb.driver)
                 actions.move_to_element_with_offset(
                     el,
-                    x,
-                    y
+                    rect["width"]/2,
+                    rect["height"]/2
                 )
-                actions.pause(0.3)
+                actions.pause(1)
                 actions.click()
                 actions.perform()
                 time.sleep(5)

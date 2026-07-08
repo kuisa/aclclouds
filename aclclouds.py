@@ -242,8 +242,8 @@ class AclcloudsRenewal:
                 if not sb.is_element_visible("text=Server renewed successfully"):
                     # 尝试20次
                     for i in range(20):
-                    self.try_keep_click(sb)
-                    time.sleep(3)
+                        self.try_keep_click(sb)
+                        time.sleep(3)
                     if sb.is_element_visible("text=Server renewed successfully"):
                         self.log("✅ 验证码图片破解成功")
                         break

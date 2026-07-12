@@ -80,10 +80,8 @@ class AclcloudsRenewal:
             self.log(f"❌ TG 推送失败: {e}")
 
     def get_expiry_time(self, sb):
-        selector = ".projects-card-expiry .projects-expiry-value"
-        # 等待元素可见（SeleniumBase 内置等待）
-        sb.wait_for_element_visible(selector, timeout=10)
-        # 获取文本
+        selector = ".client-card:first-child .projects-expiry-value"
+        sb.wait_for_element_present(selector, timeout=30)
         return sb.get_text(selector).strip()
 
     def try_click_robot(self, sb):

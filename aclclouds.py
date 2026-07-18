@@ -159,28 +159,11 @@ class AclcloudsRenewal:
         for i in range(40):
 
             self.log(f"🔍 分析 {i+1}/40")
+
             time.sleep(2)
 
             # ======================
-            # 页面滚动
-            # ======================
-            try:
-                sb.execute_script(
-                    "window.scrollTo(0, document.body.scrollHeight);"
-                )
-
-                time.sleep(1)
-
-                sb.execute_script(
-                    "window.scrollTo(0,0);"
-                )
-
-            except Exception:
-                pass
-
-
-            # ======================
-            # Discord 授权按钮
+            # 查找 Discord 按钮
             # ======================
             try:
 
@@ -193,72 +176,97 @@ class AclcloudsRenewal:
                 )
 
 
+                clicked = False
+
+
                 for btn in buttons:
 
                     try:
 
-                        text = (btn.text or "").strip()
+                        text = (
+                            btn.text or ""
+                        ).strip()
+
 
                         self.log(
                             f"按钮: {repr(text)}"
                         )
 
 
-                        if "继续滚动" in text or text == "Continue":
+                        # Discord 第一步
+                        if "继续滚动" in text:
 
-                            self.log("🟡 发现继续滚动按钮")
+                            self.log(
+                                "🟡 发现继续滚动按钮"
+                            )
 
-                            try:
-                                sb.click(btn)
 
-                                self.log("✅ 已点击继续滚动")
+                            sb.click(btn)
 
-                                time.sleep(5)
 
-                            except Exception as e:
-                                self.log(
-                                    f"继续滚动点击失败:{e}"
-                                )
+                            self.log(
+                                "✅ 已点击继续滚动"
+                            )
+
+
+                            clicked = True
+
+                            time.sleep(5)
+
+                            break
+
+
+
+                        # Discord 授权按钮
+                        if (
+                            "授权" in text
+                            or text == "Authorize"
+                            or text == "Authorise"
+                        ):
+
+                            self.log(
+                                "🟢 找到授权按钮"
+                            )
+
+
+                            sb.click(btn)
+
+
+                            self.log(
+                                "✅ OAuth授权点击完成"
+                            )
+
+
+                            clicked = True
+
+                            time.sleep(8)
 
                             break
 
 
+                    except Exception as e:
 
-                        if "授权" in text or text in [
-                            "Authorize",
-                            "Authorise"
-                        ]:
+                        self.log(
+                            f"按钮处理错误: {e}"
+                        )
 
-                            self.log("🟢 找到授权按钮")
 
-                            try:
+                if not clicked:
 
-                                sb.click(btn)
-
-                                self.log(
-                                    "✅ OAuth授权点击完成"
-                                )
-
-                                time.sleep(8)
-
-                            except Exception as e:
-
-                                self.log(
-                                    f"授权点击失败:{e}"
-                                )
-
-                            break
+                    self.log(
+                        "⚠️ 当前没有可点击按钮"
+                    )
 
 
             except Exception as e:
 
                 self.log(
-                    f"OAuth按钮检测失败:{e}"
+                    f"OAuth按钮检测失败: {e}"
                 )
 
 
             # ======================
-            # 判断跳转
+            # 检查是否跳回
             # ======================
             try:
 
@@ -269,7 +277,9 @@ class AclcloudsRenewal:
                 )
 
 
-                if "dash.aclclouds.com" in url:
+                if (
+                    "dash.aclclouds.com" in url
+                ):
 
                     self.log(
                         "✅ OAuth完成"
@@ -278,9 +288,10 @@ class AclcloudsRenewal:
                     return True
 
 
-            except:
+            except Exception:
 
                 pass
+
 
 
         self.log(

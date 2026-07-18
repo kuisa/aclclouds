@@ -158,7 +158,7 @@ class AclcloudsRenewal:
 
         for i in range(40):
 
-            self.log(f"🔍 分析 {i+1}/20")
+            self.log(f"🔍 分析 {i+1}/40")
             time.sleep(2)
 
             # ======================
@@ -204,66 +204,50 @@ class AclcloudsRenewal:
                         )
 
 
-                        if text in [
-                            "继续滚动……",
-                            "Continue",
-                        ]:
+                        if "继续滚动" in text or text == "Continue":
 
                             self.log("🟡 发现继续滚动按钮")
 
-                            ActionChains(
-                                sb.driver
-                            ).move_to_element(
-                                btn
-                            ).click().perform()
+                            try:
+                                sb.click(btn)
 
-                            self.log("✅ 已点击继续滚动")
+                                self.log("✅ 已点击继续滚动")
 
-                            time.sleep(5)
+                                time.sleep(5)
+
+                            except Exception as e:
+                                self.log(
+                                    f"继续滚动点击失败:{e}"
+                                )
 
                             break
 
 
 
-                        if text in [
-                            "授权",
+                        if "授权" in text or text in [
                             "Authorize",
                             "Authorise"
                         ]:
 
                             self.log("🟢 找到授权按钮")
 
-                            sb.execute_script(
-                                """
-                                arguments[0].scrollIntoView({
-                                    block:'center'
-                                });
-                                """,
-                                btn
-                            )
+                            try:
 
-                            time.sleep(1)
+                                sb.click(btn)
 
-                            ActionChains(
-                                sb.driver
-                            ).move_to_element(
-                                btn
-                            ).click().perform()
+                                self.log(
+                                    "✅ OAuth授权点击完成"
+                                )
 
+                                time.sleep(8)
 
-                            self.log(
-                                "✅ OAuth授权点击完成"
-                            )
+                            except Exception as e:
 
-                            time.sleep(8)
+                                self.log(
+                                    f"授权点击失败:{e}"
+                                )
 
                             break
-
-
-                    except Exception as e:
-                        self.log(
-                            f"按钮错误:{e}"
-                        )
 
 
             except Exception as e:
@@ -285,7 +269,7 @@ class AclcloudsRenewal:
                 )
 
 
-                if "client.hnhost.net" in url:
+                if "dash.aclclouds.com" in url:
 
                     self.log(
                         "✅ OAuth完成"

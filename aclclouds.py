@@ -201,7 +201,10 @@ class AclcloudsRenewal:
                             )
 
 
-                            sb.click(btn)
+                            sb.execute_script(
+                                "arguments[0].click();",
+                                btn
+                            )
 
 
                             self.log(
@@ -229,7 +232,10 @@ class AclcloudsRenewal:
                             )
 
 
-                            sb.click(btn)
+                            sb.execute_script(
+                                "arguments[0].click();",
+                                btn
+                            )
 
 
                             self.log(

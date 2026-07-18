@@ -268,14 +268,6 @@ class AclcloudsRenewal:
                             f"按钮处理错误: {e}"
                         )
 
-
-                if not clicked:
-
-                    self.log(
-                        "⚠️ 当前没有可点击按钮"
-                    )
-
-
             except Exception as e:
 
                 self.log(
@@ -296,7 +288,7 @@ class AclcloudsRenewal:
 
 
                 if (
-                    "dash.aclclouds.com" in url
+                    "aclclouds.com" in url
                 ):
 
                     self.log(
@@ -370,8 +362,7 @@ class AclcloudsRenewal:
                 time.sleep(5)
                 login_screenshot = f"{self.screenshot_dir}/login.png"
                 sb.save_screenshot(login_screenshot)
-                self.send_telegram_notify("进入登录页面", login_screenshot)
-                return                
+                self.send_telegram_notify("进入登录页面", login_screenshot) 
                 
                 # 4. 进入Project页面
                 self.log("📂 进入Project页面")

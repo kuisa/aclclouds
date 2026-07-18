@@ -190,9 +190,10 @@ class AclcloudsRenewal:
                 let closeBtn = btns.find(b => b.innerText.includes('Close'));
                 if (closeBtn) closeBtn.click();
                 """) # 关闭 Close
-                #project_screenshot = f"{self.screenshot_dir}/project.png"
-                #sb.save_screenshot(project_screenshot)
-                #self.send_telegram_notify("访问项目页面", project_screenshot)
+                project_screenshot = f"{self.screenshot_dir}/project.png"
+                sb.save_screenshot(project_screenshot)
+                self.send_telegram_notify("访问项目页面", project_screenshot)
+                return
 
                 # 4. 判断是否有Renew按钮
                 selector = "button:contains('Renew')"

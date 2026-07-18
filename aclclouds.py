@@ -210,9 +210,6 @@ class AclcloudsRenewal:
                                 "✅ 已点击继续滚动"
                             )
 
-
-                            clicked = True
-
                             time.sleep(5)
 
                             break
@@ -239,9 +236,6 @@ class AclcloudsRenewal:
                             self.log(
                                 "✅ OAuth授权点击完成"
                             )
-
-
-                            clicked = True
 
                             time.sleep(8)
 
